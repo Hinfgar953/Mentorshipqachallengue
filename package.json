@@ -1,0 +1,35 @@
+{
+  "name": "Mentorshipqachallengue",
+  "version": "1.0.0",
+  "description": "Playwright + TypeScript automation: UI (qapractice.com), API (fakestoreapi.com), BDD and unit tests",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test": "playwright test --project=chromium --project=api --project=unit",
+    "login": "playwright test tests/functional/login.spec.ts --project=chromium --headed",
+    "ecommerce": "playwright test tests/functional/ecommerce.spec.ts --project=chromium --headed",
+    "flight-booking": "playwright test tests/functional/flight-booking.spec.ts --project=chromium --headed",
+    "debug": "playwright test tests/functional/login.spec.ts --project=chromium --debug",
+    "debug-ui": "playwright test tests/functional/login.spec.ts --project=chromium --ui",
+    "test:ui": "playwright test --project=chromium",
+    "test:api": "playwright test --project=api",
+    "test:api:local": "cross-env NODE_OPTIONS=--tls-max-v1.2 playwright test --project=api --workers=1",
+    "test:unit": "playwright test --project=unit",
+    "test:bdd": "bddgen && playwright test --project=bdd",
+    "test:firefox": "playwright test --project=firefox",
+    "test:webkit": "playwright test --project=webkit",
+    "test:all-browsers": "playwright test --project=chromium --project=firefox --project=webkit",
+    "report": "playwright show-report",
+    "trace": "playwright show-trace",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.6.3",
+    "cross-env": "^10.1.0",
+    "dotenv": "^18.0.5",
+    "playwright-bdd": "^9.2.1",
+    "typescript": "^7.0.2",
+    "zod": "^4.6.5"
+  }
+}

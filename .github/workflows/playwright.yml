@@ -1,0 +1,64 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  core:
+    name: Typecheck + unit + API + BDD
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      UI_USERNAME: ${{ secrets.UI_USERNAME }}
+      UI_PASSWORD: ${{ secrets.UI_PASSWORD }}
+      API_USERNAME: ${{ secrets.API_USERNAME }}
+      API_PASSWORD: ${{ secrets.API_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run typecheck
+      - run: npm run test:unit
+      - run: npm run test:api
+      - run: npm run test:bdd
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: report-core
+          path: playwright-report/
+          retention-days: 7
+
+  ui:
+    name: UI (${{ matrix.project }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      UI_USERNAME: ${{ secrets.UI_USERNAME }}
+      UI_PASSWORD: ${{ secrets.UI_PASSWORD }}
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps ${{ matrix.project }}
+      - run: npx playwright test --project=${{ matrix.project }}
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: report-ui-${{ matrix.project }}
+          path: playwright-report/
+          retention-days: 7
