@@ -1,22 +1,16 @@
 import { defineConfig, devices } from "@playwright/test";
 import { defineBddConfig } from "playwright-bdd";
-import { env } from "./configs/env";
 
-//reads the .feature files, joins them with the steps and returns the folder with the generated tests
 const bddTestDir = defineBddConfig({
   features: "tests/bdd/features",
   steps: ["tests/bdd/steps"],
   importTestFrom: "./tests/fixtures/test",
 });
 
-/**
- * See https://playwright.dev/docs/test-configuration.
- */
 export default defineConfig({
   testDir: "./tests",
   /* Run tests in files in parallel */
   fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry: the public demo sites are sometimes slow or unstable */
   retries: process.env.CI ? 2 : 1,
