@@ -38,7 +38,7 @@ npm run test:bdd
 
 ## Configuration
 
-`TEST_ENV` selects the `.env.<name>` file. If it is not set, `.env.myenvironment` is used. This file supplies the environment URLs and timeout. These files are loaded relative to the project, regardless of the directory from which Playwright is started.
+`TEST_ENV` selects the `.env.<name>` file. If it is not set, `.env.myenvironment` is used. This file supplies the environment URLs and timeout. These files are loaded relative to the project, regardless of the directory from which Playwright is started. Unit tests do not require environment variables; UI and API projects validate their required settings when they run.
 
 Credentials are read from `.env.local`, which is excluded by `.gitignore`. The selected environment file is loaded first; `.env.local` can provide credentials without overriding its URLs or timeout.
 ## Setup

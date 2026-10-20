@@ -5,6 +5,7 @@ import { PageManager } from "../../page-objects/PageManager";
 import { ProductsApi } from "../../api/ProductsApi";
 import { ApiAuthorization } from "../../api/ApiAutorization";
 import { MESSAGES } from "../../configs/constants";
+import { env } from "../../configs/env";
 
 //---------- custom matchers ----------
 export const expect = baseExpect.extend({
@@ -45,6 +46,7 @@ export const expect = baseExpect.extend({
 
 //---------- fixtures ----------
 type Fixtures = {
+  environmentConfig: void;
   blockAds: void;
   pages: PageManager;
   productsApi: ProductsApi;
@@ -52,6 +54,25 @@ type Fixtures = {
 };
 
 export const test = base.extend<Fixtures>({
+  environmentConfig: [
+    async ({}, use, testInfo) => {
+      if (testInfo.project.name === "unit") {
+        await use();
+        return;
+      }
+
+      if (testInfo.project.name === "api") {
+        void env.apiBaseUrl;
+      } else {
+        void env.uiBaseUrl;
+        void env.actionTimeout;
+      }
+
+      await use();
+    },
+    { auto: true },
+  ],
+
   //auto fixture: qapractice.com shows Google ads, which slow the page down and can cover buttons
   blockAds: [
     async ({ context }, use) => {

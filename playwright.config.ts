@@ -30,8 +30,8 @@ export default defineConfig({
     : [["list"], ["html", { open: "never" }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    baseURL: env.uiBaseUrl,
-    actionTimeout: env.actionTimeout,
+    baseURL: process.env.UI_BASE_URL || undefined,
+    actionTimeout: process.env.UI_TIMEOUT ? Number(process.env.UI_TIMEOUT) : undefined,
     navigationTimeout: 30_000,
     screenshot: "only-on-failure",
     trace: "retain-on-failure",
@@ -50,7 +50,7 @@ export default defineConfig({
       testDir: "./tests/api",
       retries: 2,
       use: {
-        baseURL: env.apiBaseUrl,
+        baseURL: process.env.API_BASE_URL || undefined,
         extraHTTPHeaders: { Accept: "application/json" },
       },
     },

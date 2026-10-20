@@ -20,9 +20,15 @@ function required(name: string): string {
 
 export const env = {
   name: TEST_ENV,
-  uiBaseUrl: required("UI_BASE_URL"),
-  apiBaseUrl: required("API_BASE_URL"),
-  actionTimeout: Number(required("UI_TIMEOUT")),
+  get uiBaseUrl() {
+    return required("UI_BASE_URL");
+  },
+  get apiBaseUrl() {
+    return required("API_BASE_URL");
+  },
+  get actionTimeout() {
+    return Number(required("UI_TIMEOUT"));
+  },
 
   //getters: the credentials are only read when a test uses them, so the unit tests do not need them
   get ui() {
